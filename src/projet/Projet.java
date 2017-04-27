@@ -10,7 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -24,7 +27,6 @@ public class Projet extends Application {
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
         btn.setOnAction(new EventHandler<ActionEvent>() {
-            
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Hello World!");
@@ -32,13 +34,16 @@ public class Projet extends Application {
         });
         
         StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        GridPane gp = new GridPane();
+        root.getChildren().add(gp);
         
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root, 850, 260);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        Controller c = new Controller(root);
     }
 
     /**
