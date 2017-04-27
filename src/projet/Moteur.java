@@ -6,6 +6,7 @@
 package projet;
 
 import java.util.ArrayList;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -13,10 +14,11 @@ import java.util.logging.Logger;
  * @author houdebil
  */
 public class Moteur {
+    private final static Logger LOGGER = Logger.getLogger(Moteur.class.getName());
+
     private int[][] terrain;
     public final int HAUTEUR = 9;
     public final int LARGEUR = 16;
-    private Logger logger;
     private int tour = 1;
 
     public Moteur() {
@@ -24,10 +26,9 @@ public class Moteur {
         for (int i = 0; i < HAUTEUR; i++)
             for (int j = 0; j < LARGEUR; j++)
                 this.terrain[i][j] = 0;
-        //logger = new Logger("a", this);
+        LOGGER.info("Moteur initialisé");
     }
-    
-    
+
     // action
     // returns 1 (success) or 0 (fail)
     public int action(Point p) {
@@ -53,16 +54,16 @@ public class Moteur {
     }
     
     public String toString() {
-        String a = "";
+        StringBuilder a = new StringBuilder();
         
         for (int i = 0; i < HAUTEUR; i++) {
             for (int j = 0; j < LARGEUR; j++) {
-                a += "[" + this.terrain[i][j] + "]";
+                a.append("[").append(this.terrain[i][j]).append("]");
             }
-            a += "\n";
+            a.append("\n");
         }
         
-        return a;
+        return a.toString();
     }
     
     public ArrayList<Point> getPointsDispo() {
@@ -79,12 +80,16 @@ public class Moteur {
     }
     
     public int rollback() {
-        for (int i = 0; i < HAUTEUR; i++)
+        if (tour <= 1) return 0;
+
+        for (int i = 0; i < HAUTEUR; i++) {
             for (int j = 0; j < LARGEUR; j++) {
-                if (this.terrain[i][j] == this.tour)
+                if (this.terrain[i][j] == this.tour-1)
                     this.terrain[i][j] = 0;
             }
-                
+        }
+
+        this.tour--;
         return 1;
     }
 
