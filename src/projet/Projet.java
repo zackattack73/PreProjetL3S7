@@ -3,22 +3,36 @@ package projet;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import java.util.Optional;
-import java.util.logging.Logger;
+import projet.ctrl.ActionsCtrl;
+import projet.ctrl.AffichageCtrl;
+import projet.ctrl.GaufreCtrl;
+import projet.model.IA;
+import projet.model.Joueur;
+import projet.model.Terrain;
 
 public class Projet extends Application {
-    private final static Logger LOGGER = Logger.getLogger(Projet.class.getName());
+    private Stage primaryStage;
+    private BorderPane root;
+
+    // Joueurs
+    private Joueur joueurs[];
+
+    // Ctrl
+    private AffichageCtrl affichageCtrl;
+    private GaufreCtrl gaufreCtrl;
+    private ActionsCtrl actionsCtrl;
+
+    // Terrain
+    private Terrain terrain;
+
     private final static int HAUTEUR_MIN = 2;
     private final static int LARGEUR_MIN = 2;
     private int hauteur;
@@ -79,34 +93,39 @@ public class Projet extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        BorderPane root = new BorderPane();
+        this.primaryStage = primaryStage;
+        root = new BorderPane();
         GridPane gridPane = new GridPane();
         VBox vBox = new VBox();
-        Joueur j1, j2;
+        HBox hBox = new HBox();
+
+        joueurs = new Joueur[2];
 
         root.setCenter(gridPane);
         root.setLeft(vBox);
+        root.setTop(hBox);
 
         dialog();
         if (hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN) Platform.exit();
 
-        Scene scene = new Scene(root, largeur * 85, hauteur * 40); // TODO: taille
+        Scene scene = new Scene(root, largeur * 80 + 120, hauteur * 35 + 50);
+        scene.getStylesheets().add(Projet.class.getResource("Projet.css").toExternalForm());
         primaryStage.setTitle("Projet Gaufre S7 - PreProd");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Moteur moteur = new Moteur(hauteur, largeur);
+        terrain = new Terrain(hauteur, largeur);
 
-        j1 = new Joueur(moteur, "A");
+        joueurs[0] = new Joueur(terrain, "A");
         if (ia) {
-            j2 = new IA(moteur, "IA", IA.DIFF_MOYEN);
+            joueurs[1] = new IA(terrain, "IA", IA.DIFF_MOYEN);
         } else {
-            j2 = new Joueur(moteur, "B");
+            joueurs[1] = new Joueur(terrain, "B");
         }
 
-        GaufreCtrl c = new GaufreCtrl(gridPane, moteur, j1, j2);
-        ActionsCtrl actionsCtrl = new ActionsCtrl(vBox, moteur);
-        actionsCtrl.setGaufreCtrl(c);
+        this.gaufreCtrl = new GaufreCtrl(gridPane, joueurs, this);
+        this.actionsCtrl = new ActionsCtrl(vBox, this);
+        this.affichageCtrl = new AffichageCtrl(hBox, this);
     }
 
     /**
@@ -115,5 +134,20 @@ public class Projet extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
+    public AffichageCtrl getAffichageCtrl() {
+        return affichageCtrl;
+    }
+
+    public GaufreCtrl getGaufreCtrl() {
+        return gaufreCtrl;
+    }
+
+    public ActionsCtrl getActionsCtrl() {
+        return actionsCtrl;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
 }

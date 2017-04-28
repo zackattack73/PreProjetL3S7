@@ -3,24 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projet;
+package projet.model;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- *
- * @author houdebil
- */
 public class IA extends Joueur {
     public final static int DIFF_FACILE = 0;
     public final static int DIFF_MOYEN = 1;
     public final static int DIFF_DIFFICILE = 2;
-    int difficulte;
+    private int difficulte;
+    private Random random;
 
-    public IA(Moteur m, String nom, int difficulte) {
-        super(m, nom);
+    public IA(Terrain terrain, String nom, int difficulte) {
+        super(terrain, nom);
         this.difficulte = difficulte;
+        this.random = new Random();
     }
 
     public int action(ArrayList<Point> pts) {
@@ -36,36 +34,32 @@ public class IA extends Joueur {
         }
     }
 
-    public int actionFacile(ArrayList<Point> pts) {
+    private int actionFacile(ArrayList<Point> pts) {
         if (pts.isEmpty()) return 0;
-        Random r = new Random();
-        Point p = pts.get(r.nextInt(pts.size()));
+        Point p = pts.get(random.nextInt(pts.size()));
 
         return action(p);
     }
 
-    public int actionMoyen(ArrayList<Point> pts) {
+    private int actionMoyen(ArrayList<Point> pts) {
         if (pts.isEmpty()) return 0;
-        Random r = new Random();
 
         if (pts.size() == 1) {
             return action(pts.get(0));
         } else {
-            if (moteur.valueAt(new Point(1, 0)) > 0) {
+            if (terrain.valueAt(new Point(1, 0)) > 0) {
                 return action(new Point(0, 1));
-            } else if (moteur.valueAt(new Point(0, 1)) > 0) {
+            } else if (terrain.valueAt(new Point(0, 1)) > 0) {
                 return action(new Point(1, 0));
             } else {
                 pts.remove(0);
-                return action(pts.get(r.nextInt(pts.size())));
+                return action(pts.get(random.nextInt(pts.size())));
             }
         }
     }
 
-    public int actionDifficulte(ArrayList<Point> pts) {
+    private int actionDifficulte(ArrayList<Point> pts) {
         if (pts.isEmpty()) return 0;
-        Random r = new Random();
-
 
         return action(pts);
     }

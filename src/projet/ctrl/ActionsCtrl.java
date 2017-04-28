@@ -1,9 +1,11 @@
-package projet;
+package projet.ctrl;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import projet.Projet;
 
 /**
  * Package ${PACKAGE} / Project PreProjetL3S7.
@@ -11,35 +13,32 @@ import javafx.scene.layout.VBox;
  * Created by Nico (22:32).
  */
 public class ActionsCtrl {
-    private Moteur moteur;
+    private Projet projet;
     private VBox vBox;
 
-    private GaufreCtrl gaufreCtrl;
-
-    public ActionsCtrl(VBox vBox, Moteur moteur) {
-        this.moteur = moteur;
+    public ActionsCtrl(VBox vBox, Projet projet) {
+        this.projet = projet;
         this.vBox = vBox;
 
         init();
     }
 
-    public void setGaufreCtrl(GaufreCtrl gaufreCtrl) {
-        this.gaufreCtrl = gaufreCtrl;
-    }
-
     private void init() {
         this.vBox.setAlignment(Pos.CENTER);
+        this.vBox.setPadding(new Insets(15));
+        this.vBox.setSpacing(5);
 
         Button rollback = new Button("Rollback");
+        rollback.setMaxWidth(Double.MAX_VALUE);
         rollback.setOnAction(event -> {
-            if (moteur.rollback() == 1) gaufreCtrl.updateButtons();
+            projet.getGaufreCtrl().rollback();
+            projet.getTerrain().rollback();
         });
         this.vBox.getChildren().add(rollback);
 
         Button exit = new Button("Exit");
-        exit.setOnAction(event -> {
-            Platform.exit();
-        });
+        exit.setMaxWidth(Double.MAX_VALUE);
+        exit.setOnAction(event -> Platform.exit());
         this.vBox.getChildren().add(exit);
     }
 }
