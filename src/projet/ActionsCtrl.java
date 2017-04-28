@@ -1,5 +1,6 @@
 package projet;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -10,10 +11,10 @@ import javafx.scene.layout.VBox;
  * Created by Nico (22:32).
  */
 public class ActionsCtrl {
-    Moteur moteur;
-    VBox vBox;
+    private Moteur moteur;
+    private VBox vBox;
 
-    GaufreCtrl gaufreCtrl;
+    private GaufreCtrl gaufreCtrl;
 
     public ActionsCtrl(VBox vBox, Moteur moteur) {
         this.moteur = moteur;
@@ -34,5 +35,11 @@ public class ActionsCtrl {
             if (moteur.rollback() == 1) gaufreCtrl.updateButtons();
         });
         this.vBox.getChildren().add(rollback);
+
+        Button exit = new Button("Exit");
+        exit.setOnAction(event -> {
+            Platform.exit();
+        });
+        this.vBox.getChildren().add(exit);
     }
 }

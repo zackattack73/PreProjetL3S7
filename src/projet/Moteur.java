@@ -17,14 +17,20 @@ public class Moteur {
     private final static Logger LOGGER = Logger.getLogger(Moteur.class.getName());
 
     private int[][] terrain;
-    public final int HAUTEUR = 9;
-    public final int LARGEUR = 16;
+    public int hauteur;
+    public int largeur;
     private int tour = 1;
 
     public Moteur() {
-        this.terrain = new int[HAUTEUR][LARGEUR];
-        for (int i = 0; i < HAUTEUR; i++)
-            for (int j = 0; j < LARGEUR; j++)
+        this(16, 9);
+    }
+
+    public Moteur(int hauteur, int largeur) {
+        this.hauteur = hauteur;
+        this.largeur = largeur;
+        this.terrain = new int[hauteur][largeur];
+        for (int i = 0; i < hauteur; i++)
+            for (int j = 0; j < largeur; j++)
                 this.terrain[i][j] = 0;
         LOGGER.info("Moteur initialisé");
     }
@@ -32,11 +38,11 @@ public class Moteur {
     // action
     // returns 1 (success) or 0 (fail)
     public int action(Point p) {
-        if (p.x >= HAUTEUR || p.y >= LARGEUR) return 0;
+        if (p.x >= hauteur || p.y >= largeur) return 0;
         boolean actionValide = false;
         
-        for (int i = p.x; i < HAUTEUR; i++)
-            for (int j = p.y; j < LARGEUR; j++) {
+        for (int i = p.x; i < hauteur; i++)
+            for (int j = p.y; j < largeur; j++) {
                 if (this.terrain[i][j] == 0) {
                     this.terrain[i][j] = tour;
                     actionValide = true;
@@ -52,12 +58,16 @@ public class Moteur {
     private boolean partieTerminee() {
         return this.terrain[0][0] > 0;
     }
+
+    public int valueAt(Point p) {
+        return this.terrain[p.x][p.y];
+    }
     
     public String toString() {
         StringBuilder a = new StringBuilder();
         
-        for (int i = 0; i < HAUTEUR; i++) {
-            for (int j = 0; j < LARGEUR; j++) {
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
                 a.append("[").append(this.terrain[i][j]).append("]");
             }
             a.append("\n");
@@ -69,12 +79,13 @@ public class Moteur {
     public ArrayList<Point> getPointsDispo() {
         ArrayList<Point> pts = new ArrayList<>();
         
-        for (int i = 0; i < HAUTEUR; i++) {
-            for (int j = 0; j < LARGEUR; j++) {
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
                 if (this.terrain[i][j] == 0)
                     pts.add(new Point(i, j));
             }
         }
+        System.out.println(pts);
         
         return pts;
     }
@@ -82,8 +93,8 @@ public class Moteur {
     public int rollback() {
         if (tour <= 1) return 0;
 
-        for (int i = 0; i < HAUTEUR; i++) {
-            for (int j = 0; j < LARGEUR; j++) {
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
                 if (this.terrain[i][j] == this.tour-1)
                     this.terrain[i][j] = 0;
             }
