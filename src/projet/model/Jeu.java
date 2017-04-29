@@ -211,15 +211,17 @@ public class Jeu extends Observable {
     public void jouer(Point p) {
         if (this.terrain.action(getJoueurActuel().action(p), this.tour) == 0) return;
 
-        int[] scores = new int[joueurs.size()];
-        int i = 0;
-        for (Joueur j : joueurs) scores[i++] = j.getScore();
+        if (!this.partieTerminee()) {
+            int[] scores = new int[joueurs.size()];
+            int i = 0;
+            for (Joueur j : joueurs) scores[i++] = j.getScore();
 
-        if (this.tour <= this.configurations.size()) for (i = this.configurations.size(); i >= this.tour; i--) this.configurations.remove(i - 1);
-        configurations.add(new Configuration(this.tour++, p, scores));
+            if (this.tour <= this.configurations.size()) for (i = this.configurations.size(); i >= this.tour; i--) this.configurations.remove(i - 1);
+            configurations.add(new Configuration(this.tour++, p, scores));
 
-        this.getJoueurActuel().plusScore(5);
-        this.changeJoueur();
+            this.getJoueurActuel().plusScore(5);
+            this.changeJoueur();
+        }
 
         this.setChanged();
         this.notifyObservers();
@@ -271,5 +273,9 @@ public class Jeu extends Observable {
 
     public ArrayList<String> getNomDispo() {
         return this.nomDispo;
+    }
+
+    public boolean partieTerminee() {
+        return this.terrain.partieTerminee();
     }
 }

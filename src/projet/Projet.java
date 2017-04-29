@@ -12,7 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import projet.ctrl.ActionsCtrl;
@@ -203,6 +202,16 @@ public class Projet extends Application {
         this.gaufreCtrl = new GaufreCtrl(gridPane, this);
         this.actionsCtrl = new ActionsCtrl(vBox, this);
         this.affichageCtrl = new AffichageCtrl(hBox, this);
+    }
+
+    public void partieTerminee() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Partie terminée!");
+        alert.setHeaderText(null);
+        alert.setContentText("Le perdant (celui qui a découvert le poison) est " + this.jeu.getJoueurActuel().getNom());
+
+        alert.showAndWait();
+        Platform.exit();
     }
 
     @Override

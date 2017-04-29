@@ -1,10 +1,7 @@
 package projet.ctrl;
 
-import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -97,6 +94,12 @@ public class GaufreCtrl implements Observer {
     }
 
     public void update(Observable obs, Object obj) {
+        if (this.jeu.partieTerminee()) {
+            System.out.println("Partie terminée!");
+            System.out.println("Perdant: " + this.jeu.getJoueurActuel().getNom());
+            this.projet.partieTerminee();
+        }
+
         for (int x = 0; x < terrain.hauteur; x++) {
             for (int y = 0; y < terrain.largeur; y++) {
                 if (this.terrain.getCase(new Point(x, y)) > 0) {

@@ -86,7 +86,7 @@ public class Terrain {
         } else return 0;
     }
 
-    private boolean partieTerminee() {
+    public boolean partieTerminee() {
         return this.cases[0][0] > 0;
     }
 
