@@ -15,6 +15,7 @@ import projet.ctrl.ActionsCtrl;
 import projet.ctrl.AffichageCtrl;
 import projet.ctrl.GaufreCtrl;
 import projet.model.IA;
+import projet.model.Jeu;
 import projet.model.Joueur;
 import projet.model.Terrain;
 
@@ -24,6 +25,9 @@ public class Projet extends Application {
 
     // Joueurs
     private Joueur joueurs[];
+
+    // Jeu
+    private Jeu jeu;
 
     // Ctrl
     private AffichageCtrl affichageCtrl;
@@ -40,47 +44,46 @@ public class Projet extends Application {
     private boolean ia;
 
     private void dialog() {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("Menu");
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Accueil");
         dialog.setHeaderText("Choisir la taille du terrain");
 
-        ButtonType loginButtonType = new ButtonType("Valider", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        TextField username = new TextField();
-        username.setPromptText("Hauteur");
-        TextField password = new TextField();
-        password.setPromptText("Largeur");
+        TextField largeur = new TextField();
+        largeur.setPromptText("Largeur");
+        TextField hauteur = new TextField();
+        hauteur.setPromptText("Hauteur");
         CheckBox cb = new CheckBox();
 
-        grid.add(new Label("Hauteur:"), 0, 0);
-        grid.add(username, 1, 0);
-        grid.add(new Label("Largeur:"), 0, 1);
-        grid.add(password, 1, 1);
+        grid.add(new Label("Largeur:"), 0, 0);
+        grid.add(largeur, 1, 0);
+        grid.add(new Label("Hauteur:"), 0, 1);
+        grid.add(hauteur, 1, 1);
         grid.add(new Label("IA:"), 0, 2);
         grid.add(cb, 1, 2);
 
         dialog.getDialogPane().setContent(grid);
 
-        Platform.runLater(username::requestFocus);
+        //Platform.runLater(largeur::requestFocus);
 
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
+            if (dialogButton == ButtonType.OK) {
                 try {
-                    hauteur = Integer.parseInt(username.getText());
+                    this.hauteur = Integer.parseInt(hauteur.getText());
                 } catch (NumberFormatException e) {
-                    hauteur = 10;
+                    this.hauteur = 10;
                 }
 
                 try {
-                    largeur = Integer.parseInt(password.getText());
+                    this.largeur = Integer.parseInt(largeur.getText());
                 } catch (NumberFormatException e) {
-                    largeur = 10;
+                    this.largeur = 10;
                 }
 
                 ia = cb.isSelected();
@@ -118,12 +121,14 @@ public class Projet extends Application {
 
         joueurs[0] = new Joueur(terrain, "A");
         if (ia) {
+            System.out.println("IA Créée");
             joueurs[1] = new IA(terrain, "IA", IA.DIFF_MOYEN);
         } else {
             joueurs[1] = new Joueur(terrain, "B");
         }
 
-        this.gaufreCtrl = new GaufreCtrl(gridPane, joueurs, this);
+        jeu = new Jeu(terrain, joueurs);
+        this.gaufreCtrl = new GaufreCtrl(gridPane, this);
         this.actionsCtrl = new ActionsCtrl(vBox, this);
         this.affichageCtrl = new AffichageCtrl(hBox, this);
     }
@@ -149,5 +154,9 @@ public class Projet extends Application {
 
     public Terrain getTerrain() {
         return terrain;
+    }
+
+    public Jeu getJeu() {
+        return jeu;
     }
 }

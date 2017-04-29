@@ -17,6 +17,10 @@ public class Joueur {
         return score;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public void plusScore(int score) {
         this.score += score;
     }
@@ -25,13 +29,13 @@ public class Joueur {
         return nom;
     }
 
-    public int action(Point p) {
-        int r = terrain.action(p);
+    public Point action(Point p) {
+        //int r = terrain.action(p);
         System.out.println("[" + nom + "] action: " + p);
-        if (r == 2) {
+        /*if (r == 2) {
             System.out.println("Defaite: " + this.nom);
             Platform.exit();
-        }
-        return r;
+        }*/
+        return p;
     }
 }

@@ -21,7 +21,7 @@ public class IA extends Joueur {
         this.random = new Random();
     }
 
-    public int action(ArrayList<Point> pts) {
+    public Point action(ArrayList<Point> pts) {
         switch (difficulte) {
             case DIFF_FACILE:
                 return actionFacile(pts);
@@ -30,37 +30,34 @@ public class IA extends Joueur {
             case DIFF_DIFFICILE:
                 return actionDifficulte(pts);
             default:
-                return 0;
+                return null;
         }
     }
 
-    private int actionFacile(ArrayList<Point> pts) {
-        if (pts.isEmpty()) return 0;
-        Point p = pts.get(random.nextInt(pts.size()));
-
-        return action(p);
+    private Point actionFacile(ArrayList<Point> pts) {
+        if (pts.isEmpty()) return null;
+        return pts.get(random.nextInt(pts.size()));
     }
 
-    private int actionMoyen(ArrayList<Point> pts) {
-        if (pts.isEmpty()) return 0;
+    private Point actionMoyen(ArrayList<Point> pts) {
+        if (pts.isEmpty()) return null;
 
         if (pts.size() == 1) {
-            return action(pts.get(0));
+            return pts.get(0);
         } else {
             if (terrain.valueAt(new Point(1, 0)) > 0) {
-                return action(new Point(0, 1));
+                return new Point(0, 1);
             } else if (terrain.valueAt(new Point(0, 1)) > 0) {
-                return action(new Point(1, 0));
+                return new Point(1, 0);
             } else {
                 pts.remove(0);
-                return action(pts.get(random.nextInt(pts.size())));
+                return pts.get(random.nextInt(pts.size()));
             }
         }
     }
 
-    private int actionDifficulte(ArrayList<Point> pts) {
-        if (pts.isEmpty()) return 0;
-
-        return action(pts);
+    private Point actionDifficulte(ArrayList<Point> pts) {
+        if (pts.isEmpty()) return null;
+        return null;
     }
 }

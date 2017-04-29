@@ -7,7 +7,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import projet.Projet;
-import projet.obs.Observer;
+import projet.model.Jeu;
+
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Package ${PACKAGE} / Project PreProjetL3S7.
@@ -17,6 +20,7 @@ import projet.obs.Observer;
 public class AffichageCtrl implements Observer {
     private HBox hBox;
     private Projet projet;
+    private Jeu jeu;
 
     private Label score;
     private Label joueur;
@@ -25,7 +29,8 @@ public class AffichageCtrl implements Observer {
     public AffichageCtrl(HBox hBox, Projet projet) {
         this.hBox = hBox;
         this.projet = projet;
-        projet.getTerrain().addObserver(this);
+        this.jeu = projet.getJeu();
+        jeu.addObserver(this);
 
         init();
     }
@@ -49,15 +54,13 @@ public class AffichageCtrl implements Observer {
         hBox.getChildren().add(this.joueur);
         hBox.getChildren().add(r2);
         hBox.getChildren().add(this.tour);
-
-        this.update();
     }
 
-    public void update() {
+    public void update(Observable obs, Object obj) {
         try {
-            this.score.setText("Score: " + this.projet.getGaufreCtrl().getJoueurActuel().getScore());
-            this.joueur.setText(this.projet.getGaufreCtrl().getJoueurActuel().getNom());
-            this.tour.setText("Tour " + this.projet.getTerrain().getTour());
+            this.score.setText("Score: " + this.jeu.getJoueurActuel().getScore());
+            this.joueur.setText(this.jeu.getJoueurActuel().getNom());
+            this.tour.setText("Tour " + this.jeu.getTour());
         } catch (NullPointerException npe) {
             this.score.setText("Score: 0");
             this.joueur.setText("");

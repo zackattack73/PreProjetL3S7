@@ -1,17 +1,19 @@
 package projet.model;
 
 import java.util.ArrayList;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * Package ${PACKAGE} / Project PreProjetL3S7.
  * Date 2017 04 28.
  * Created by Nico (17:12).
  */
-public class Terrain extends Moteur {
+public class Terrain {
     private int[][] cases;
     public int hauteur;
     public int largeur;
-    public int tour = 1;
+    private final static Logger LOGGER = Logger.getLogger(Terrain.class.getName());
 
     public Terrain() {
         this(16, 9);
@@ -34,13 +36,9 @@ public class Terrain extends Moteur {
         // TODO: save the terrain to the file at path
     }
 
-    public int getTour() {
-        return tour;
-    }
-
     // action
     // returns 1 (success) or 0 (fail)
-    public int action(Point p) {
+    public int action(Point p, int tour) {
         if (p.x >= hauteur || p.y >= largeur) return 0;
         boolean actionValide = false;
 
@@ -53,8 +51,6 @@ public class Terrain extends Moteur {
             }
 
         if (actionValide) {
-            this.tour++;
-            this.notifyObserver();
             return (partieTerminee() ? 2 : 1);
         } else return 0;
     }
@@ -89,24 +85,17 @@ public class Terrain extends Moteur {
                     pts.add(new Point(i, j));
             }
         }
-        System.out.println(pts);
 
         return pts;
     }
 
-    public int rollback() {
-        if (tour <= 1) return 0;
-
+    public void rollback(int tour) {
         for (int i = 0; i < hauteur; i++) {
             for (int j = 0; j < largeur; j++) {
-                if (this.cases[i][j] == this.tour-1)
+                if (this.cases[i][j] == tour-1)
                     this.cases[i][j] = 0;
             }
         }
-
-        this.tour--;
-        this.notifyObserver();
-        return 1;
     }
 
     public int[][] getCases() {
