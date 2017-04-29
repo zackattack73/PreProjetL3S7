@@ -3,8 +3,8 @@ package projet.model;
 import java.util.Random;
 
 public class Joueur {
-    protected Jeu jeu;
-    private String nom;
+    Jeu jeu;
+    String nom;
     private int score;
 
     public Joueur(String nom) {

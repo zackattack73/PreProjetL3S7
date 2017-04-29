@@ -31,6 +31,11 @@ public class ActionsCtrl {
         this.vBox.setPadding(new Insets(15));
         this.vBox.setSpacing(5);
 
+        Button newGame = new Button("New game");
+        newGame.setMaxWidth(Double.MAX_VALUE);
+        newGame.setOnAction(event -> this.projet.newGame());
+        this.vBox.getChildren().add(newGame);
+
         Button undo = new Button("Undo");
         undo.setMaxWidth(Double.MAX_VALUE);
         undo.setOnAction(event -> this.jeu.undo());

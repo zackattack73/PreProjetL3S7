@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class IA extends Joueur {
-    public final static int DIFF_FACILE = 0;
-    public final static int DIFF_MOYEN = 1;
-    public final static int DIFF_DIFFICILE = 2;
+    public final static int DIFF_FACILE = 1;
+    public final static int DIFF_MOYEN = 2;
+    public final static int DIFF_DIFFICILE = 3;
     private int difficulte;
     private Random random;
 
@@ -21,6 +21,7 @@ public class IA extends Joueur {
 
     public IA(Jeu jeu, String nom, int difficulte) {
         super(jeu, nom);
+        this.nom += " (IA)";
         this.difficulte = difficulte;
         this.random = new Random();
     }

@@ -1,5 +1,10 @@
 package projet.ctrl;
 
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -18,6 +23,27 @@ public class GaufreCtrl implements Observer {
             this.p = p;
         }
     }
+
+    private class SleeperService extends Service<Void> {
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) { }
+                    return null;
+                }
+            };
+        }
+
+        @Override
+        protected void succeeded() {
+            jeu.jouer(((IA)jeu.getJoueurActuel()).action(terrain.getPointsDispo()));
+        }
+    }
+    private SleeperService sleeperService = new SleeperService();
 
     private Projet projet;
     private Terrain terrain;
@@ -45,6 +71,8 @@ public class GaufreCtrl implements Observer {
         gridPane.setHgap(2);
         gridPane.setVgap(2);
 
+
+
         for (int x = 0; x < terrain.hauteur; x++) {
             for (int y = 0; y < terrain.largeur; y++) {
                 Point p = new Point(x, y);
@@ -55,8 +83,9 @@ public class GaufreCtrl implements Observer {
 
                     jeu.jouer(button.p);
 
+
                     if (jeu.getJoueurActuel() instanceof IA)
-                        jeu.jouer(((IA)jeu.getJoueurActuel()).action(terrain.getPointsDispo()));
+                        sleeperService.restart();
                 });
 
                 this.pb[x][y] = pb;

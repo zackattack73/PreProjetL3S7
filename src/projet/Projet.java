@@ -2,6 +2,8 @@ package projet;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -43,7 +45,8 @@ public class Projet extends Application {
     private int largeur;
     private String nomJoueur1;
     private String nomJoueur2;
-    private boolean j2ia;
+
+    private int iaDifficulte;
     private boolean openFromFile;
     private String terrainFilename;
 
@@ -84,7 +87,10 @@ public class Projet extends Application {
 
         TextField nomJoueur2 = new TextField();
         nomJoueur2.setPromptText("Nom joueur 2");
-        CheckBox j2ia = new CheckBox();
+
+        ObservableList<String> options = FXCollections.observableArrayList("Non", "Facile", "Moyen", "Difficile");
+        ComboBox iaDifficulte = new ComboBox(options);
+        iaDifficulte.setValue("Non");
 
         grid.add(new Label("Largeur:"), 0, 0);
         grid.add(largeur, 1, 0);
@@ -94,8 +100,8 @@ public class Projet extends Application {
         grid.add(nomJoueur1, 1, 2);
         grid.add(new Label("Nom joueur 2:"), 0, 3);
         grid.add(nomJoueur2, 1, 3);
-        grid.add(new Label("IA?"), 2, 3);
-        grid.add(j2ia, 3, 3);
+        grid.add(new Label("IA"), 2, 3);
+        grid.add(iaDifficulte, 3, 3);
         grid.add(fromFilename, 0, 4, 2, 1);
 
         dialog.getDialogPane().setContent(grid);
@@ -106,7 +112,22 @@ public class Projet extends Application {
             if (dialogButton == ButtonType.OK) {
                 this.nomJoueur1 = nomJoueur1.getText();
                 this.nomJoueur2 = nomJoueur2.getText();
-                this.j2ia = j2ia.isSelected();
+                switch (iaDifficulte.getValue().toString()) {
+                    case "Non":
+                        this.iaDifficulte = 0;
+                        break;
+                    case "Facile":
+                        this.iaDifficulte = IA.DIFF_FACILE;
+                        break;
+                    case "Moyen":
+                        this.iaDifficulte = IA.DIFF_MOYEN;
+                        break;
+                    case "Difficile":
+                        this.iaDifficulte = IA.DIFF_DIFFICILE;
+                        break;
+                    default:
+                        this.iaDifficulte = 0;
+                }
 
                 try {
                     this.hauteur = Integer.parseInt(hauteur.getText());
@@ -119,8 +140,6 @@ public class Projet extends Application {
                 } catch (NumberFormatException e) {
                     this.largeur = 10;
                 }
-
-                this.j2ia = j2ia.isSelected();
             }
             return null;
         });
@@ -128,9 +147,9 @@ public class Projet extends Application {
         dialog.showAndWait();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public void newGame() {
+        dialog();
+
         root = new BorderPane();
         GridPane gridPane = new GridPane();
         VBox vBox = new VBox();
@@ -141,8 +160,6 @@ public class Projet extends Application {
         root.setCenter(gridPane);
         root.setLeft(vBox);
         root.setTop(hBox);
-
-        dialog();
 
         if (hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN) Platform.exit();
 
@@ -158,8 +175,8 @@ public class Projet extends Application {
             jeu = new Jeu(hauteur, largeur);
 
             joueurs[0] = new Joueur(jeu, nomJoueur1);
-            if (j2ia) {
-                joueurs[1] = new IA(jeu, nomJoueur2, IA.DIFF_MOYEN);
+            if (iaDifficulte > 0) {
+                joueurs[1] = new IA(jeu, nomJoueur2, iaDifficulte);
             } else {
                 joueurs[1] = new Joueur(jeu, nomJoueur2);
             }
@@ -170,6 +187,13 @@ public class Projet extends Application {
         this.gaufreCtrl = new GaufreCtrl(gridPane, this);
         this.actionsCtrl = new ActionsCtrl(vBox, this);
         this.affichageCtrl = new AffichageCtrl(hBox, this);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+
+        newGame();
     }
 
     /**
