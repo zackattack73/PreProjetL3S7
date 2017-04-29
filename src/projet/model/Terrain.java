@@ -34,12 +34,10 @@ public class Terrain {
             String parts[];
             int linen = 0;
 
-            LOGGER.info("Load terrain");
             if ((sCurrentLine = br.readLine()) != null) {
                 parts = sCurrentLine.split(";");
                 this.largeur = Integer.parseInt(parts[0]);
                 this.hauteur = Integer.parseInt(parts[1]);
-                LOGGER.info("L" + this.largeur + " H" + this.hauteur);
             }
 
             this.cases = new int[this.hauteur][this.largeur];
@@ -49,7 +47,6 @@ public class Terrain {
                     this.cases[linen][i] = Integer.parseInt(parts[i]);
                 linen++;
             }
-            LOGGER.info(this.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

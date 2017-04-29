@@ -154,7 +154,7 @@ public class Jeu extends Observable {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
             bw.write(this.tour + "," + this.joueurs.size() + "\n"); // write "tour,nbJoueurs"
             for (Joueur j : this.joueurs)
-                bw.write(j.getNom() + ":" + j.getScore() + "\n"); // "nomJ:scoreJ"
+                bw.write(j.getNom() + ":" + j.getScore() + ":" + ((j instanceof IA) ? ((IA)j).getDifficulte() : 0) + "\n"); // "nomJ:scoreJ:iaDiff"
 
             bw.write(this.terrain.getSaveString());
 
@@ -174,19 +174,22 @@ public class Jeu extends Observable {
             if ((sCurrentLine = br.readLine()) != null) { // load "tour,nbJoueurs"
                 parts = sCurrentLine.split(",");
                 this.tour = Integer.parseInt(parts[0]);
-                LOGGER.info("Tour " + this.tour);
                 this.joueurs = new ArrayList<>();
                 nbJ = Integer.parseInt(parts[1]);
-                LOGGER.info("Nombre joueurs " + nbJ);
             }
 
             while (linen < nbJ && (sCurrentLine = br.readLine()) != null) {
                 parts = sCurrentLine.split(":");
-                Joueur j = new Joueur(this, parts[0]);
+                Joueur j;
+                int difficulte = Integer.parseInt(parts[2]);
+                if (difficulte == 0)
+                    j = new Joueur(this, parts[0]);
+                else
+                    j = new IA(this, parts[0], difficulte);
+
                 j.setScore(Integer.parseInt(parts[1]));
                 this.joueurs.add(j);
                 linen++;
-                LOGGER.info(j.toString());
             }
 
             this.terrain = new Terrain(br);

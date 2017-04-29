@@ -52,4 +52,9 @@ public class Joueur {
     public String toString() {
         return this.nom + ": " + this.score + " pts";
     }
+
+    // gets name with attributes (not to write on file!)
+    public String getNomFinal() {
+        return this.nom;
+    }
 }

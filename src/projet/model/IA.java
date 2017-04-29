@@ -21,7 +21,6 @@ public class IA extends Joueur {
 
     public IA(Jeu jeu, String nom, int difficulte) {
         super(jeu, nom);
-        this.nom += " (IA)";
         this.difficulte = difficulte;
         this.random = new Random();
     }
@@ -64,5 +63,14 @@ public class IA extends Joueur {
     private Point actionDifficulte(ArrayList<Point> pts) {
         if (pts.isEmpty()) return null;
         return null;
+    }
+
+    public int getDifficulte() {
+        return difficulte;
+    }
+
+    // gets name with attributes (not to write on file!)
+    public String getNomFinal() {
+        return super.getNomFinal() + " (IA)";
     }
 }

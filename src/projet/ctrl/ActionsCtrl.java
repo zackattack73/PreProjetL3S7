@@ -5,8 +5,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import projet.Projet;
 import projet.model.Jeu;
+
+import java.io.File;
 
 /**
  * Package ${PACKAGE} / Project PreProjetL3S7.
@@ -48,7 +51,17 @@ public class ActionsCtrl {
 
         Button save = new Button("Save");
         save.setMaxWidth(Double.MAX_VALUE);
-        save.setOnAction(event -> this.jeu.save("saveState.txt"));
+        save.setOnAction(event -> {
+            String filename;
+            final FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(new File("."));
+            File file = fileChooser.showSaveDialog(this.projet.primaryStage);
+            if (file != null) {
+                filename = file.getAbsolutePath();
+                System.out.println("Save to " + filename);
+                this.jeu.save(filename);
+            }
+        });
         this.vBox.getChildren().add(save);
 
         Button exit = new Button("Exit");

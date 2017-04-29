@@ -11,6 +11,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import projet.ctrl.ActionsCtrl;
@@ -22,9 +24,10 @@ import projet.model.Joueur;
 import projet.model.Terrain;
 
 import java.io.*;
+import java.util.Optional;
 
 public class Projet extends Application {
-    private Stage primaryStage;
+    public Stage primaryStage;
     private BorderPane root;
 
     // Joueurs
@@ -50,8 +53,10 @@ public class Projet extends Application {
     private boolean openFromFile;
     private String terrainFilename;
 
-    private void dialog() {
-        Dialog<String> dialog = new Dialog<>();
+    private Label fileSelected;
+
+    private boolean dialog() {
+        Dialog<Boolean> dialog = new Dialog<>();
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("."));
 
@@ -66,12 +71,16 @@ public class Projet extends Application {
         grid.setPadding(new Insets(20, 150, 10, 10));
 
         Button fromFilename = new Button("Choisir un fichier de sauvegarde");
+        fileSelected = new Label("Aucun fichier sélecté");
+        fileSelected.setTextFill(Color.RED);
         fromFilename.setOnAction(event -> {
             File file = fileChooser.showOpenDialog(dialog.getOwner());
             if (file != null) {
                 terrainFilename = file.getAbsolutePath();
                 openFromFile = true;
                 System.out.println("Open from " + terrainFilename);
+                fileSelected.setText("Sauvegarde: " + terrainFilename);
+                fileSelected.setTextFill(Color.GREEN);
             }
         });
         fromFilename.setMaxWidth(Double.MAX_VALUE);
@@ -103,6 +112,7 @@ public class Projet extends Application {
         grid.add(new Label("IA"), 2, 3);
         grid.add(iaDifficulte, 3, 3);
         grid.add(fromFilename, 0, 4, 2, 1);
+        grid.add(fileSelected, 2, 4, 2, 1);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -140,15 +150,21 @@ public class Projet extends Application {
                 } catch (NumberFormatException e) {
                     this.largeur = 10;
                 }
+
+                return true;
             }
-            return null;
+            return false;
         });
 
-        dialog.showAndWait();
+        Optional<Boolean> result = dialog.showAndWait();
+        return (result.orElse(false));
     }
 
     public void newGame() {
-        dialog();
+        boolean result = dialog();
+        if (!result) {
+            return;
+        }
 
         root = new BorderPane();
         GridPane gridPane = new GridPane();

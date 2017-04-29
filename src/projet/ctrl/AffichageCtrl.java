@@ -61,7 +61,7 @@ public class AffichageCtrl implements Observer {
     public void update(Observable obs, Object obj) {
         try {
             this.score.setText("Score: " + this.jeu.getJoueurActuel().getScore());
-            this.joueur.setText(this.jeu.getJoueurActuel().getNom());
+            this.joueur.setText(this.jeu.getJoueurActuel().getNomFinal());
             this.tour.setText("Tour " + this.jeu.getTour());
         } catch (NullPointerException npe) {
             this.score.setText("Score: 0");
