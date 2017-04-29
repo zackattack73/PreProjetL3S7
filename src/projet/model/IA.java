@@ -15,8 +15,12 @@ public class IA extends Joueur {
     private int difficulte;
     private Random random;
 
-    public IA(Terrain terrain, String nom, int difficulte) {
-        super(terrain, nom);
+    public IA(String nom, int difficulte) {
+        this(null, nom, difficulte);
+    }
+
+    public IA(Jeu jeu, String nom, int difficulte) {
+        super(jeu, nom);
         this.difficulte = difficulte;
         this.random = new Random();
     }
@@ -45,9 +49,9 @@ public class IA extends Joueur {
         if (pts.size() == 1) {
             return pts.get(0);
         } else {
-            if (terrain.valueAt(new Point(1, 0)) > 0) {
+            if (jeu.getTerrain().valueAt(new Point(1, 0)) > 0) {
                 return new Point(0, 1);
-            } else if (terrain.valueAt(new Point(0, 1)) > 0) {
+            } else if (jeu.getTerrain().valueAt(new Point(0, 1)) > 0) {
                 return new Point(1, 0);
             } else {
                 pts.remove(0);

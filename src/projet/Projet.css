@@ -1,5 +1,6 @@
 .button {
-    -fx-background-color: linear-gradient(to bottom, #3498db, #2980b9);
+    //-fx-background-color: linear-gradient(to bottom, coral, #cb6600);
+    -fx-background-color: linear-gradient(to bottom, #ae5700, #9e5000);
     -fx-border-style: solid;
     -fx-border-color: #234f6b;
     -fx-border-radius: 2px;
@@ -16,7 +17,9 @@
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(to bottom, #3cb0fd, #3498db);
+    //-fx-background-color: linear-gradient(to bottom, #3cb0fd, #3498db);
+    //-fx-background-color: linear-gradient(to bottom, #ae5700, #9e5000);
+    -fx-background-color: linear-gradient(to bottom, coral, #cb6600);
     //-fx-text-decoration: none;
 }
 
@@ -28,7 +31,6 @@
     -fx-font-size: 30px;
     -fx-font-style: italic;
     -fx-text-fill: white;
-
 }
 
 HBox {
@@ -41,4 +43,14 @@ VBox {
     -fx-background-color: #3cb0fd;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
     -fx-pref-width: 120px;
+}
+
+VBox > .button {
+    -fx-background-color: linear-gradient(to bottom, #3498db, #2980b9);
+    -fx-text-fill: white;
+}
+
+VBox > .button:hover {
+    -fx-background-color: linear-gradient(to bottom, #3cb0fd, #3498db);
+    -fx-text-fill: white;
 }

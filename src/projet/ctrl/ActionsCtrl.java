@@ -41,6 +41,11 @@ public class ActionsCtrl {
         redo.setOnAction(event -> this.jeu.redo());
         this.vBox.getChildren().add(redo);
 
+        Button save = new Button("Save");
+        save.setMaxWidth(Double.MAX_VALUE);
+        save.setOnAction(event -> this.jeu.save("saveState.txt"));
+        this.vBox.getChildren().add(save);
+
         Button exit = new Button("Exit");
         exit.setMaxWidth(Double.MAX_VALUE);
         exit.setOnAction(event -> Platform.exit());

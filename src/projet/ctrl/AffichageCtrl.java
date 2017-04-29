@@ -54,6 +54,8 @@ public class AffichageCtrl implements Observer {
         hBox.getChildren().add(this.joueur);
         hBox.getChildren().add(r2);
         hBox.getChildren().add(this.tour);
+
+        update(null, null);
     }
 
     public void update(Observable obs, Object obj) {

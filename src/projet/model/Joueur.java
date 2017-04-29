@@ -1,16 +1,31 @@
 package projet.model;
 
-import javafx.application.Platform;
+import java.util.Random;
 
 public class Joueur {
-    protected Terrain terrain;
+    protected Jeu jeu;
     private String nom;
     private int score;
 
-    public Joueur(Terrain terrain, String nom) {
-        this.terrain = terrain;
-        this.nom = nom;
+    public Joueur(String nom) {
+        this(null, nom);
+    }
+
+    public Joueur(Jeu jeu, String nom) {
+        this.jeu = jeu;
+
+        if (nom.length() == 0 && this.jeu != null) {
+            this.nom = this.jeu.getNomDispo().get(new Random().nextInt(this.jeu.getNomDispo().size()));
+            this.jeu.getNomDispo().remove(this.nom);
+        } else {
+            this.nom = nom;
+        }
+
         this.score = 0;
+    }
+
+    public void setJeu(Jeu jeu) {
+        this.jeu = jeu;
     }
 
     public int getScore() {
@@ -30,12 +45,11 @@ public class Joueur {
     }
 
     public Point action(Point p) {
-        //int r = terrain.action(p);
         System.out.println("[" + nom + "] action: " + p);
-        /*if (r == 2) {
-            System.out.println("Defaite: " + this.nom);
-            Platform.exit();
-        }*/
         return p;
+    }
+
+    public String toString() {
+        return this.nom + ": " + this.score + " pts";
     }
 }

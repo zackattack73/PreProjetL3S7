@@ -63,6 +63,8 @@ public class GaufreCtrl implements Observer {
                 gridPane.add(pb, y, x);
             }
         }
+
+        update(null, null);
     }
 
     public void update(Observable obs, Object obj) {
