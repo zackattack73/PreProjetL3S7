@@ -234,8 +234,12 @@ public class Jeu extends Observable {
         this.changeJoueur(-1);
         this.setScores(this.configurations.get(this.tour-1).getScores());
 
-        this.setChanged();
-        this.notifyObservers();
+        if (this.getJoueurActuel() instanceof IA) {
+            this.undo();
+        } else {
+            this.setChanged();
+            this.notifyObservers();
+        }
     }
 
     public void setScores(int[] scores) {
@@ -251,8 +255,12 @@ public class Jeu extends Observable {
         this.changeJoueur();
         this.setScores(this.configurations.get(this.tour++-1).getScores());
 
-        this.setChanged();
-        this.notifyObservers();
+        if (this.getJoueurActuel() instanceof IA) {
+            this.redo();
+        } else {
+            this.setChanged();
+            this.notifyObservers();
+        }
     }
 
     public Terrain getTerrain() {

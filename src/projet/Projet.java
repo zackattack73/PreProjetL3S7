@@ -173,32 +173,13 @@ public class Projet extends Application {
             return;
         }
 
-        root = new StackPane();
-        rootPane = new BorderPane();
-        tourIa = new TourIA(this);
-        GridPane gridPane = new GridPane();
-        VBox vBox = new VBox();
-        HBox hBox = new HBox();
-
         joueurs = new Joueur[2];
-
-        rootPane.setCenter(gridPane);
-        rootPane.setLeft(vBox);
-        rootPane.setTop(hBox);
-
-        root.getChildren().add(rootPane);
-
-        if (hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN) Platform.exit();
-
-        Scene scene = new Scene(root, largeur * 80 + 120, hauteur * 35 + 50);
-        scene.getStylesheets().add(Projet.class.getResource("Projet.css").toExternalForm());
-        primaryStage.setTitle("Projet Gaufre S7 - PreProd");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        if (openFromFile)
+        if (openFromFile) {
             jeu = new Jeu(terrainFilename);
-        else {
+
+            largeur = jeu.getTerrain().largeur;
+            hauteur = jeu.getTerrain().hauteur;
+        } else {
             jeu = new Jeu(hauteur, largeur);
 
             joueurs[0] = new Joueur(jeu, nomJoueur1);
@@ -211,9 +192,27 @@ public class Projet extends Application {
             for (Joueur j : joueurs) jeu.addJoueur(j);
         }
 
-        this.gaufreCtrl = new GaufreCtrl(gridPane, this);
-        this.actionsCtrl = new ActionsCtrl(vBox, this);
-        this.affichageCtrl = new AffichageCtrl(hBox, this);
+        root = new StackPane();
+        rootPane = new BorderPane();
+        tourIa = new TourIA(this);
+
+        root.getChildren().add(rootPane);
+
+        if (hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN) Platform.exit();
+
+        Scene scene = new Scene(root, largeur * 80 + 120, hauteur * 35 + 50);
+        scene.getStylesheets().add(Projet.class.getResource("Projet.css").toExternalForm());
+        primaryStage.setTitle("Projet GaufreView S7 - PreProd");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        this.gaufreCtrl = new GaufreCtrl(this);
+        this.actionsCtrl = new ActionsCtrl(this);
+        this.affichageCtrl = new AffichageCtrl(this);
+
+        rootPane.setCenter(this.gaufreCtrl.getGaufreView());
+        rootPane.setLeft(this.actionsCtrl.getActionsView());
+        rootPane.setTop(this.affichageCtrl.getAffichageView());
     }
 
     public void partieTerminee() {

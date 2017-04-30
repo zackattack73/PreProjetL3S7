@@ -33,24 +33,24 @@
     -fx-text-fill: white;
 }
 
-HBox {
+#AffichageView {
     -fx-background-color: #909090;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
     -fx-pref-height: 50px;
 }
 
-VBox {
+#ActionsView {
     -fx-background-color: #3cb0fd;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
     -fx-pref-width: 120px;
 }
 
-VBox > .button {
+#ActionsView > .button {
     -fx-background-color: linear-gradient(to bottom, #3498db, #2980b9);
     -fx-text-fill: white;
 }
 
-VBox > .button:hover {
+#ActionsView > .button:hover {
     -fx-background-color: linear-gradient(to bottom, #3cb0fd, #3498db);
     -fx-text-fill: white;
 }
