@@ -28,7 +28,8 @@ public class GaufreCtrl implements Observer {
                 @Override
                 protected Void call() throws Exception {
                     try {
-                        Thread.sleep(1000);
+                        Double tps = IA.TEMPS_LATENCE_BASE + Math.ceil(Math.random() * (IA.TEMPS_LATENCE_VAR * 2)) - IA.TEMPS_LATENCE_VAR;
+                        Thread.sleep(tps.intValue());
                     } catch (InterruptedException e) { }
                     return null;
                 }
@@ -38,6 +39,7 @@ public class GaufreCtrl implements Observer {
         @Override
         protected void succeeded() {
             jeu.jouer(((IA)jeu.getJoueurActuel()).action(terrain.getPointsDispo()));
+            projet.hideTourIa();
         }
     }
     private SleeperService sleeperService = new SleeperService();
@@ -64,11 +66,8 @@ public class GaufreCtrl implements Observer {
     
     private void init() {
         gridPane.setAlignment(Pos.CENTER);
-        //gridPane.setPadding(new Insets(0));
         gridPane.setHgap(2);
         gridPane.setVgap(2);
-
-
 
         for (int x = 0; x < terrain.hauteur; x++) {
             for (int y = 0; y < terrain.largeur; y++) {
@@ -81,8 +80,10 @@ public class GaufreCtrl implements Observer {
                     jeu.jouer(button.p);
 
 
-                    if (jeu.getJoueurActuel() instanceof IA)
+                    if (jeu.getJoueurActuel() instanceof IA) {
                         sleeperService.restart();
+                        this.projet.showTourIa();
+                    }
                 });
 
                 this.pb[x][y] = pb;

@@ -54,3 +54,20 @@ VBox > .button:hover {
     -fx-background-color: linear-gradient(to bottom, #3cb0fd, #3498db);
     -fx-text-fill: white;
 }
+
+.TourIA {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.TourIA > .label {
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "optima";
+    -fx-font-style: normal;
+}
+
+.TourIA > .label > .text {
+    -fx-stroke: #413f42;
+    -fx-stroke-width: 2px;
+}

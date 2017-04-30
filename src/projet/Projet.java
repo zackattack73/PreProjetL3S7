@@ -7,10 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -21,13 +18,16 @@ import projet.model.IA;
 import projet.model.Jeu;
 import projet.model.Joueur;
 import projet.model.Terrain;
+import projet.view.TourIA;
 
 import java.io.*;
 import java.util.Optional;
 
 public class Projet extends Application {
     public Stage primaryStage;
-    private BorderPane root;
+    public StackPane root;
+    private BorderPane rootPane;
+    private TourIA tourIa;
 
     // Joueurs
     private Joueur joueurs[];
@@ -159,22 +159,34 @@ public class Projet extends Application {
         return (result.orElse(false));
     }
 
+    public void showTourIa() {
+        this.tourIa.show();
+    }
+
+    public void hideTourIa() {
+        this.tourIa.hide();
+    }
+
     public void newGame() {
         boolean result = dialog();
         if (!result) {
             return;
         }
 
-        root = new BorderPane();
+        root = new StackPane();
+        rootPane = new BorderPane();
+        tourIa = new TourIA(this);
         GridPane gridPane = new GridPane();
         VBox vBox = new VBox();
         HBox hBox = new HBox();
 
         joueurs = new Joueur[2];
 
-        root.setCenter(gridPane);
-        root.setLeft(vBox);
-        root.setTop(hBox);
+        rootPane.setCenter(gridPane);
+        rootPane.setLeft(vBox);
+        rootPane.setTop(hBox);
+
+        root.getChildren().add(rootPane);
 
         if (hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN) Platform.exit();
 

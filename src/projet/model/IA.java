@@ -7,6 +7,8 @@ public class IA extends Joueur {
     public final static int DIFF_FACILE = 1;
     public final static int DIFF_MOYEN = 2;
     public final static int DIFF_DIFFICILE = 3;
+    public final static int TEMPS_LATENCE_BASE = 2000;
+    public final static int TEMPS_LATENCE_VAR = 500;
     private int difficulte;
     private Random random;
 
