@@ -1,26 +1,19 @@
 .button {
-    //-fx-background-color: linear-gradient(to bottom, coral, #cb6600);
     -fx-background-color: linear-gradient(to bottom, #ae5700, #9e5000);
     -fx-border-style: solid;
     -fx-border-color: #234f6b;
     -fx-border-radius: 2px;
     -fx-font-family: Arial;
-    //-fx-color: #ffffff;
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-padding: 6px 12px;
-    //-fx-border: solid #234f6b 2px;
-    //-fx-text-decoration: none;
     -fx-pref-width: 75px;
     -fx-pref-height: 30px;
 
 }
 
 .button:hover {
-    //-fx-background-color: linear-gradient(to bottom, #3cb0fd, #3498db);
-    //-fx-background-color: linear-gradient(to bottom, #ae5700, #9e5000);
     -fx-background-color: linear-gradient(to bottom, coral, #cb6600);
-    //-fx-text-decoration: none;
 }
 
 .root {

@@ -2,18 +2,11 @@ package projet.model;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
-/**
- * Package ${PACKAGE} / Project PreProjetL3S7.
- * Date 2017 04 28.
- * Created by Nico (17:12).
- */
 public class Terrain {
     private int[][] cases;
     public int hauteur;
     public int largeur;
-    private final static Logger LOGGER = Logger.getLogger(Terrain.class.getName());
 
     public Terrain() {
         this(16, 9);
@@ -67,8 +60,6 @@ public class Terrain {
         return sb.toString();
     }
 
-    // action
-    // returns 1 (success) or 0 (fail)
     public int action(Point p, int tour) {
         if (p.x >= hauteur || p.y >= largeur) return 0;
         boolean actionValide = false;

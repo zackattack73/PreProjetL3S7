@@ -12,11 +12,6 @@ import projet.model.Jeu;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Package ${PACKAGE} / Project PreProjetL3S7.
- * Date 2017 05 01.
- * Created by Nico (00:27).
- */
 public class AffichageView extends HBox implements Observer {
     private final AffichageCtrl affichageCtrl;
     private final Jeu jeu;

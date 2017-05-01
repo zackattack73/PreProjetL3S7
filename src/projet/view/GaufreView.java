@@ -10,11 +10,6 @@ import projet.model.Terrain;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Package ${PACKAGE} / Project PreProjetL3S7.
- * Date 2017 04 30.
- * Created by Nico (23:57).
- */
 public class GaufreView extends GridPane implements Observer {
     // Model
     private Jeu jeu;

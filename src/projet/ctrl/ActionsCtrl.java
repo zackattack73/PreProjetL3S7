@@ -1,6 +1,5 @@
 package projet.ctrl;
 
-import javafx.application.Platform;
 import javafx.stage.FileChooser;
 import projet.Projet;
 import projet.model.Jeu;
@@ -8,11 +7,6 @@ import projet.view.ActionsView;
 
 import java.io.File;
 
-/**
- * Package ${PACKAGE} / Project PreProjetL3S7.
- * Date 2017 04 27.
- * Created by Nico (22:32).
- */
 public class ActionsCtrl {
     private final Projet projet;
     private final Jeu jeu;
@@ -50,7 +44,7 @@ public class ActionsCtrl {
     }
 
     public void clickExit() {
-        Platform.exit();
+        this.projet.exit();
     }
 
     public ActionsView getActionsView() {

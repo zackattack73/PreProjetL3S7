@@ -3,8 +3,8 @@ package projet.model;
 import java.util.Random;
 
 public class Joueur {
-    Jeu jeu;
-    String nom;
+    private Jeu jeu;
+    private String nom;
     private int score;
 
     public Joueur(String nom) {
@@ -42,6 +42,10 @@ public class Joueur {
 
     public String getNom() {
         return nom;
+    }
+
+    public Jeu getJeu() {
+        return this.jeu;
     }
 
     public Point action(Point p) {

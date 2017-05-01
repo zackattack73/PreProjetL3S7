@@ -17,7 +17,7 @@ public class GaufreCtrl {
                     try {
                         Double tps = IA.TEMPS_LATENCE_BASE + Math.ceil(Math.random() * (IA.TEMPS_LATENCE_VAR * 2)) - IA.TEMPS_LATENCE_VAR;
                         Thread.sleep(tps.intValue());
-                    } catch (InterruptedException e) { }
+                    } catch (InterruptedException ignored) { }
                     return null;
                 }
             };

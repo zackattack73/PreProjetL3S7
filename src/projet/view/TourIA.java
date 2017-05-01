@@ -7,26 +7,20 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
+import javafx.util.Duration;
 import projet.Projet;
 
-import javax.xml.datatype.Duration;
-
-/**
- * Package ${PACKAGE} / Project PreProjetL3S7.
- * Date 2017 04 30.
- * Created by Nico (16:57).
- */
 public class TourIA extends BorderPane {
     private Projet projet;
 
     private Label texte;
     private final static int FADE_DURATION = 250;
 
-    private FadeTransition fadeIn = new FadeTransition(new javafx.util.Duration(FADE_DURATION));
+    private FadeTransition fadeIn = new FadeTransition(new Duration(FADE_DURATION));
 
     public TourIA(Projet projet) {
         super();
+
         this.projet = projet;
         this.init();
     }
@@ -35,7 +29,7 @@ public class TourIA extends BorderPane {
         this.initTransition();
 
         this.texte = new Label("Tour de l'IA");
-        setAlignment(this.texte, Pos.CENTER);
+        BorderPane.setAlignment(this.texte, Pos.CENTER);
 
         this.getStyleClass().add("TourIA");
         this.setBottom(this.texte);
@@ -56,7 +50,7 @@ public class TourIA extends BorderPane {
 
     public void hide() { // Fade out based on timeline, because fadeIn method only works if node if present
         Timeline timeline = new Timeline();
-        KeyFrame key = new KeyFrame(new javafx.util.Duration(FADE_DURATION * 2),
+        KeyFrame key = new KeyFrame(new Duration(FADE_DURATION * 2),
                             new KeyValue(this.opacityProperty(), 0));
         timeline.getKeyFrames().add(key);
         timeline.setOnFinished((ae) -> this.projet.root.getChildren().remove(this));

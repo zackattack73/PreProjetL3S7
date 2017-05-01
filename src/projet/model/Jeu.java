@@ -4,13 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
-import java.util.logging.Logger;
 
-/**
- * Package ${PACKAGE} / Project PreProjetL3S7.
- * Date 2017 04 28.
- * Created by Nico (21:14).
- */
 public class Jeu extends Observable {
     private class Configuration {
         private int tour;
@@ -89,7 +83,6 @@ public class Jeu extends Observable {
     private int tour;
     private ArrayList<String> nomDispo;
     private final static String nomDispoPath = "nomsDispo.txt";
-    private final static Logger LOGGER = Logger.getLogger(Terrain.class.getName());
 
     private ArrayList<Configuration> configurations;
 
@@ -124,7 +117,7 @@ public class Jeu extends Observable {
 
     public void addJoueur(Joueur j) {
         this.joueurs.add(j);
-        if (j.jeu == null) j.setJeu(this);
+        if (j.getJeu() == null) j.setJeu(this);
     }
 
     private void loadNomsDisponibles() {

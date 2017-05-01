@@ -1,19 +1,10 @@
 package projet.view;
 
-import javafx.application.Platform;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import projet.ctrl.ActionsCtrl;
 
-import java.io.File;
-
-/**
- * Package ${PACKAGE} / Project PreProjetL3S7.
- * Date 2017 05 01.
- * Created by Nico (00:35).
- */
 public class ActionsView extends VBox {
     private final ActionsCtrl actionsCtrl;
 

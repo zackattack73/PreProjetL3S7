@@ -46,9 +46,9 @@ public class IA extends Joueur {
         if (pts.size() == 1) {
             return pts.get(0);
         } else {
-            if (jeu.getTerrain().valueAt(new Point(1, 0)) > 0) {
+            if (getJeu().getTerrain().valueAt(new Point(1, 0)) > 0) {
                 return new Point(0, 1);
-            } else if (jeu.getTerrain().valueAt(new Point(0, 1)) > 0) {
+            } else if (getJeu().getTerrain().valueAt(new Point(0, 1)) > 0) {
                 return new Point(1, 0);
             } else {
                 pts.remove(0);
