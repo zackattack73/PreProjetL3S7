@@ -1,7 +1,11 @@
 package projet.view;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 import projet.ctrl.GaufreCtrl;
 import projet.model.Jeu;
 import projet.model.Point;
@@ -39,6 +43,7 @@ public class GaufreView extends GridPane implements Observer {
             for (int y = 0; y < this.terrain.largeur; y++) {
                 Point p = new Point(x, y);
                 PointButton pb = new PointButton(p.toString(), p);
+
                 pb.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 pb.setOnAction(event -> {
                     PointButton button = (PointButton)event.getSource();
@@ -64,14 +69,27 @@ public class GaufreView extends GridPane implements Observer {
 
         for (int x = 0; x < this.terrain.hauteur; x++) {
             for (int y = 0; y < this.terrain.largeur; y++) {
+                final int xf = x;
+                final int yf = y;
+
+                Timeline timeline = new Timeline();
+                KeyValue kv = null;
                 if (this.terrain.getCase(new Point(x, y)) > 0) {
                     if (!this.pointButton[x][y].isDisabled()) {
-                        this.pointButton[x][y].setDisable(true);
+                        kv = new KeyValue(pointButton[x][y].opacityProperty(), 0.3);
+                        timeline.setOnFinished((ae) -> this.pointButton[xf][yf].setDisable(true));
                     }
                 } else {
                     if (this.pointButton[x][y].isDisabled()) {
-                        this.pointButton[x][y].setDisable(false);
+                        kv = new KeyValue(pointButton[x][y].opacityProperty(), 1.0);
+                        timeline.setOnFinished((ae) -> this.pointButton[xf][yf].setDisable(false));
                     }
+                }
+
+                if (kv != null) {
+                    KeyFrame key = new KeyFrame(Duration.millis(250), kv);
+                    timeline.getKeyFrames().add(key);
+                    timeline.play();
                 }
             }
         }
