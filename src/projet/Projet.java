@@ -2,118 +2,171 @@ package projet;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.util.Pair;
+import projet.ctrl.ActionsCtrl;
+import projet.ctrl.AffichageCtrl;
+import projet.ctrl.GaufreCtrl;
+import projet.model.IA;
+import projet.model.Jeu;
+import projet.model.Joueur;
+import projet.model.Terrain;
+import projet.view.ParametresDialog;
+import projet.view.TourIA;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
 public class Projet extends Application {
-    private final static Logger LOGGER = Logger.getLogger(Projet.class.getName());
+    public Stage primaryStage;
+    public StackPane root;
+    private BorderPane rootPane;
+    private TourIA tourIa;
+
+    // Joueurs
+    private Joueur joueurs[];
+
+    // Jeu
+    private Jeu jeu;
+
+    // Ctrl
+    private AffichageCtrl affichageCtrl;
+    private GaufreCtrl gaufreCtrl;
+    private ActionsCtrl actionsCtrl;
+
     private final static int HAUTEUR_MIN = 2;
     private final static int LARGEUR_MIN = 2;
-    private int hauteur;
-    private int largeur;
-    private boolean ia;
 
-    private void dialog() {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("Menu");
-        dialog.setHeaderText("Choisir la taille du terrain");
+    public int hauteur;
+    public int largeur;
+    public String nomJoueur1;
+    public String nomJoueur2;
 
-        ButtonType loginButtonType = new ButtonType("Valider", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+    public int iaDifficulte;
+    public boolean openFromFile;
+    public String terrainFilename;
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+    private ParametresDialog parametresDialog;
 
-        TextField username = new TextField();
-        username.setPromptText("Hauteur");
-        TextField password = new TextField();
-        password.setPromptText("Largeur");
-        CheckBox cb = new CheckBox();
+    private boolean parametres() {
+        Optional<Boolean> result = parametresDialog.getResult();
+        return (result.orElse(false));
+    }
 
-        grid.add(new Label("Hauteur:"), 0, 0);
-        grid.add(username, 1, 0);
-        grid.add(new Label("Largeur:"), 0, 1);
-        grid.add(password, 1, 1);
-        grid.add(new Label("IA:"), 0, 2);
-        grid.add(cb, 1, 2);
+    public void showTourIa() {
+        this.tourIa.show();
+    }
 
-        dialog.getDialogPane().setContent(grid);
+    public void hideTourIa() {
+        this.tourIa.hide();
+    }
 
-        Platform.runLater(username::requestFocus);
+    private void initModel() {
+        joueurs = new Joueur[2];
+        if (openFromFile) {
+            jeu = new Jeu(terrainFilename);
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                try {
-                    hauteur = Integer.parseInt(username.getText());
-                } catch (NumberFormatException e) {
-                    hauteur = 10;
-                }
+            largeur = jeu.getTerrain().largeur;
+            hauteur = jeu.getTerrain().hauteur;
+        } else {
+            jeu = new Jeu(hauteur, largeur);
 
-                try {
-                    largeur = Integer.parseInt(password.getText());
-                } catch (NumberFormatException e) {
-                    largeur = 10;
-                }
-
-                ia = cb.isSelected();
+            joueurs[0] = new Joueur(jeu, nomJoueur1);
+            if (iaDifficulte > 0) {
+                joueurs[1] = new IA(jeu, nomJoueur2, iaDifficulte);
+            } else {
+                joueurs[1] = new Joueur(jeu, nomJoueur2);
             }
-            return null;
-        });
 
-        dialog.showAndWait();
+            for (Joueur j : joueurs) jeu.addJoueur(j);
+        }
+    }
+
+    private void initController() {
+        this.gaufreCtrl = new GaufreCtrl(this);
+        this.actionsCtrl = new ActionsCtrl(this);
+        this.affichageCtrl = new AffichageCtrl(this);
+    }
+
+    private void initView() {
+        root = new StackPane();
+        rootPane = new BorderPane();
+        tourIa = new TourIA(this);
+
+        root.getChildren().add(rootPane);
+
+        rootPane.setCenter(this.gaufreCtrl.getGaufreView());
+        rootPane.setLeft(this.actionsCtrl.getActionsView());
+        rootPane.setTop(this.affichageCtrl.getAffichageView());
+
+        Scene scene = new Scene(root, largeur * 80 + 120, hauteur * 35 + 50);
+        scene.getStylesheets().add(Projet.class.getResource("Projet.css").toExternalForm());
+
+        primaryStage.setTitle("Projet GaufreView S7 - PreProd");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void newGame() {
+        boolean ok = parametres();
+        if (!ok) return;
+
+        if (!this.verifierPrerequis()) this.exit();
+
+        this.initModel();
+        this.initController();
+        this.initView();
+    }
+
+    public void partieTerminee() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Partie terminée!");
+        alert.setHeaderText(null);
+        alert.setContentText("Le perdant (celui qui a découvert le poison) est " + this.jeu.getJoueurActuel().getNom());
+
+        alert.showAndWait();
+        this.exit();
     }
 
     @Override
     public void start(Stage primaryStage) {
-        BorderPane root = new BorderPane();
-        GridPane gridPane = new GridPane();
-        VBox vBox = new VBox();
-        Joueur j1, j2;
+        this.primaryStage = primaryStage;
+        this.parametresDialog = new ParametresDialog(this);
 
-        root.setCenter(gridPane);
-        root.setLeft(vBox);
-
-        dialog();
-        if (hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN) Platform.exit();
-
-        Scene scene = new Scene(root, largeur * 85, hauteur * 40); // TODO: taille
-        primaryStage.setTitle("Projet Gaufre S7 - PreProd");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        Moteur moteur = new Moteur(hauteur, largeur);
-
-        j1 = new Joueur(moteur, "A");
-        if (ia) {
-            j2 = new IA(moteur, "IA", IA.DIFF_MOYEN);
-        } else {
-            j2 = new Joueur(moteur, "B");
-        }
-
-        GaufreCtrl c = new GaufreCtrl(gridPane, moteur, j1, j2);
-        ActionsCtrl actionsCtrl = new ActionsCtrl(vBox, moteur);
-        actionsCtrl.setGaufreCtrl(c);
+        newGame();
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
-    
+
+    public AffichageCtrl getAffichageCtrl() {
+        return affichageCtrl;
+    }
+
+    public GaufreCtrl getGaufreCtrl() {
+        return gaufreCtrl;
+    }
+
+    public ActionsCtrl getActionsCtrl() {
+        return actionsCtrl;
+    }
+
+    public Terrain getTerrain() {
+        return jeu.getTerrain();
+    }
+
+    public Jeu getJeu() {
+        return jeu;
+    }
+
+    private boolean verifierPrerequis() {
+        return !(   hauteur < HAUTEUR_MIN
+                ||  largeur < LARGEUR_MIN);
+    }
+
+    public void exit() {
+        Platform.exit();
+    }
 }

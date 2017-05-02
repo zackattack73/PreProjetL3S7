@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package projet;
+package projet.model;
 
-/**
- *
- * @author houdebil
- */
 public class Point {
     int x;
     int y;
@@ -24,5 +15,9 @@ public class Point {
     
     public String toString() {
         return "[" + this.x + ";" + this.y + "]";
+    }
+
+    public String getSaveString() {
+        return this.x + "," + this.y;
     }
 }
